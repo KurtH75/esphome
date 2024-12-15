@@ -23,5 +23,5 @@ def to_code(config):
 
  #   out = yield cg.get_variable(config[CONF_OUTPUT])
  #   cg.add(var.set_output(out))
-    cg.add(var.set_output(config[VSCP_ZONE, VSCP_SUBZONE]))
+    cg.add(var.set_output(config[VSCP_SUBZONE]))
     cg.add(var.set_subzone(config[VSCP_SUBZONE]))

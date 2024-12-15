@@ -2,7 +2,7 @@
 #include "empty_light.h"
 
 namespace esphome {
-namespace empty_light {
+namespace vscp {
 
 static const char *TAG = "empty_light.light";
 
@@ -34,5 +34,5 @@ void EmptyLightOutput::dump_config(){
     ESP_LOGCONFIG(TAG, "Empty custom light");
 }
 
-} //namespace empty_light
+} //namespace vscp
 } //namespace esphome

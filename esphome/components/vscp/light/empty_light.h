@@ -5,7 +5,7 @@
 #include "esphome/components/light/light_output.h"
 
 namespace esphome {
-namespace empty_light {
+namespace vscp {
 
 class EmptyLightOutput : public light::LightOutput, public Component {
  public:
@@ -20,5 +20,5 @@ class EmptyLightOutput : public light::LightOutput, public Component {
   output::FloatOutput *output_;
 };
 
-} //namespace empty_light
+} //namespace vscp
 } //namespace esphome

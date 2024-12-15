@@ -21,7 +21,7 @@ def to_code(config):
     var = cg.new_Pvariable(config[CONF_OUTPUT_ID])
     yield light.register_light(var, config)
 
- #   out = yield cg.get_variable(config[CONF_OUTPUT])
- #   cg.add(var.set_output(out))
-    cg.add(var.set_output(config[VSCP_SUBZONE]))
+    out = yield cg.get_variable(config[CONF_OUTPUT])
+    cg.add(var.set_output(out))
+ #   cg.add(var.set_output(config[VSCP_SUBZONE]))
     cg.add(var.set_subzone(config[VSCP_SUBZONE]))

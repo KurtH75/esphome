@@ -1,16 +1,16 @@
 #include "esphome/core/log.h"
-#include "empty_light.h"
+#include "vscp_light.h"
 
 namespace esphome {
 namespace vscp {
 
-static const char *TAG = "empty_light.light";
+static const char *TAG = "vscp_light.light";
 
-void EmptyLightOutput::setup() {
+void VscpLightOutput::setup() {
    
 }
 
-light::LightTraits EmptyLightOutput::get_traits() {
+light::LightTraits VscpLightOutput::get_traits() {
     auto traits = light::LightTraits();
     traits.set_supported_color_modes({light::ColorMode::ON_OFF});
 
@@ -22,15 +22,15 @@ light::LightTraits EmptyLightOutput::get_traits() {
     return traits;
 }
 
-void EmptyLightOutput::write_state(light::LightState *state) {
+void VscpLightOutput::write_state(light::LightState *state) {
 
 }
 
-void EmptyLightOutput::set_subzone(int8_t subzone_) {
+void VscpLightOutput::set_subzone(int8_t subzone_) {
     
 }
 
-void EmptyLightOutput::dump_config(){
+void VscpLightOutput::dump_config(){
     ESP_LOGCONFIG(TAG, "Empty custom light");
 }
 

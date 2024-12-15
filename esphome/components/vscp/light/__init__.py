@@ -8,10 +8,10 @@ VSCP_ZONE = 'zone'
 VSCP_SUBZONE = 'subzone'
 
 vscp_ns = cg.esphome_ns.namespace('vscp')
-EmptyLightOutput = vscp_ns.class_("EmptyLightOutput", light.LightOutput)
+VscpLightOutput = vscp_ns.class_("VscpLightOutput", light.LightOutput)
 
 CONFIG_SCHEMA = light.BRIGHTNESS_ONLY_LIGHT_SCHEMA.extend({
-    cv.GenerateID(CONF_OUTPUT_ID): cv.declare_id(EmptyLightOutput),
+    cv.GenerateID(CONF_OUTPUT_ID): cv.declare_id(VscpLightOutput),
     cv.Required(CONF_OUTPUT): cv.use_id(output.FloatOutput),
     cv.Optional(VSCP_ZONE, default=0x00): cv.int_,
     cv.Required(VSCP_SUBZONE): cv.int_

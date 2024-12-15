@@ -7,7 +7,7 @@ from .. import vscp_ns
 VSCP_ZONE = 'zone'
 VSCP_SUBZONE = 'subzone'
 
-vscp_ns = cg.esphome_ns.namespace('vscp')
+#vscp_ns = cg.esphome_ns.namespace('vscp')
 VscpLightOutput = vscp_ns.class_("VscpLightOutput", light.LightOutput)
 
 CONFIG_SCHEMA = light.BRIGHTNESS_ONLY_LIGHT_SCHEMA.extend({

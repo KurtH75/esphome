@@ -4,6 +4,8 @@ from esphome.components import light, output, canbus
 from esphome.const import CONF_OUTPUT_ID, CONF_OUTPUT
 from .. import vscp_ns
 
+DEPENDENCIES = ['canbus']
+
 VSCP_ZONE = 'zone'
 VSCP_SUBZONE = 'subzone'
 

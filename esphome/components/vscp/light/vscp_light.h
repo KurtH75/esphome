@@ -3,11 +3,12 @@
 #include "esphome/core/component.h"
 #include "esphome/components/output/float_output.h"
 #include "esphome/components/light/light_output.h"
+#include "esphome/components/canbus/canbus.h"
 
 namespace esphome {
 namespace vscp {
 
-class VscpLightOutput : public light::LightOutput, public Component {
+class VscpLightOutput : public light::LightOutput, public canbus::Canbus, public Component {
  public:
   void setup() override;
   light::LightTraits get_traits() override;

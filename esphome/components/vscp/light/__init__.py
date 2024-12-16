@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import light, output
+from esphome.components import light, output, canbus
 from esphome.const import CONF_OUTPUT_ID, CONF_OUTPUT
 from .. import vscp_ns
 
@@ -8,7 +8,7 @@ VSCP_ZONE = 'zone'
 VSCP_SUBZONE = 'subzone'
 
 #vscp_ns = cg.esphome_ns.namespace('vscp') #already done in ../__init__.py ?
-VscpLightOutput = vscp_ns.class_("VscpLightOutput", light.LightOutput)
+VscpLightOutput = vscp_ns.class_("VscpLightOutput", light.LightOutput, canbus)
 
 CONFIG_SCHEMA = light.BRIGHTNESS_ONLY_LIGHT_SCHEMA.extend({
     cv.GenerateID(CONF_OUTPUT_ID): cv.declare_id(VscpLightOutput),

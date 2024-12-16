@@ -1,5 +1,6 @@
 #include "esphome/core/log.h"
 #include "vscp_light.h"
+#include "esphome/components/canbus/canbus.h"
 
 namespace esphome {
 namespace vscp {
@@ -12,7 +13,7 @@ void VscpLightOutput::setup() {
 
 light::LightTraits VscpLightOutput::get_traits() {
     auto traits = light::LightTraits();
-    traits.set_supported_color_modes({light::ColorMode::ON_OFF});
+    traits.set_supported_color_modes({light::ColorMode::BRIGHTNESS});
 
     //traits.set_supports_brightness(true);
     //traits.set_supports_rgb(false);
@@ -23,7 +24,11 @@ light::LightTraits VscpLightOutput::get_traits() {
 }
 
 void VscpLightOutput::write_state(light::LightState *state) {
-
+    bool lightstate;
+    state->current_values_as_binary(&lightstate);
+    if (lightstate) {
+        
+    } 
 }
 
 void VscpLightOutput::set_subzone(int8_t subzone_) {

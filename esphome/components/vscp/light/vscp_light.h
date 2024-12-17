@@ -8,7 +8,7 @@
 namespace esphome {
 namespace vscp {
 
-class VscpLightOutput : public light::LightOutput, public canbus::Canbus, public Component {
+class VscpLightOutput : public light::LightOutput, public Component {
  public:
   void setup() override;
   light::LightTraits get_traits() override;

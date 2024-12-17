@@ -11,7 +11,7 @@ VSCP_SUBZONE = 'subzone'
 VSCP_CANBUS = 'canbus_id'
 
 #vscp_ns = cg.esphome_ns.namespace('vscp') #already done in ../__init__.py ?
-VscpLightOutput = vscp_ns.class_("VscpLightOutput", light.LightOutput, canbus.Canbus)
+VscpLightOutput = vscp_ns.class_("VscpLightOutput", light.LightOutput)
 
 CONFIG_SCHEMA = light.BRIGHTNESS_ONLY_LIGHT_SCHEMA.extend({
     cv.GenerateID(CONF_OUTPUT_ID): cv.declare_id(VscpLightOutput),

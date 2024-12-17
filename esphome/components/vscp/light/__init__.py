@@ -17,8 +17,7 @@ CONFIG_SCHEMA = light.BRIGHTNESS_ONLY_LIGHT_SCHEMA.extend({
     cv.GenerateID(CONF_OUTPUT_ID): cv.declare_id(VscpLightOutput),
     cv.Optional(CONF_OUTPUT): cv.use_id(output.FloatOutput),
     cv.Optional(VSCP_ZONE, default=0x00): cv.int_,
-    cv.Required(VSCP_SUBZONE): cv.int_,
-    cv.Optional(VSCP_CANBUS, default='vscpbus'): cv.use_id(canbus.Canbus)
+    cv.Required(VSCP_SUBZONE): cv.int_
 })
 
 def to_code(config):

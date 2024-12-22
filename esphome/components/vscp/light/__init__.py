@@ -1,6 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import light, output, canbus
+from esphome.components.canbus import CanbusComponent
 from esphome.const import CONF_OUTPUT_ID, CONF_OUTPUT
 from .. import vscp_ns
 

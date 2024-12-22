@@ -19,6 +19,7 @@ class VscpLightOutput : public light::LightOutput, public Component {
  
  protected:
   output::FloatOutput *output_;
+  canbus::Canbus *vscpbus_;
 };
 
 } //namespace vscp

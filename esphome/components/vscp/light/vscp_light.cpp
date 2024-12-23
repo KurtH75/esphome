@@ -2,6 +2,8 @@
 #include "vscp_light.h"
 #include "esphome/components/canbus/canbus.h"
 
+#include "esphome.h"
+
 namespace esphome {
 namespace vscp {
 

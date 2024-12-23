@@ -5,6 +5,10 @@
 #include "esphome/components/light/light_output.h"
 #include "esphome/components/canbus/canbus.h"
 
+#include "esphome.h"
+#include "esphome/core/component.h"
+#include "esphome/core/defines.h"
+
 namespace esphome {
 namespace vscp {
 

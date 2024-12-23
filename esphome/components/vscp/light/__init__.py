@@ -27,7 +27,7 @@ def to_code(config):
     yield light.register_light(var, config)
 
     canbus = yield cg.get_variable(config["canbus_id"])
-   # cg.add(canopen.set_canbus(canbus))
+    cg.add(VscpLightOutput.set_canbus(canbus))
 
     out = yield cg.get_variable(config[CONF_OUTPUT])
     cg.add(var.set_output(out))

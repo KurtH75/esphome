@@ -23,6 +23,7 @@ class VscpLightOutput : public light::LightOutput, public Component {
   
   canbus::Canbus *canbus;
   void set_canbus(canbus::Canbus *canbus);
+  void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
  
  protected:
   output::FloatOutput *output_;

@@ -25,7 +25,7 @@ class VscpLightOutput : public light::LightOutput, public Component {
   void set_canbus(canbus::Canbus *canbus);
   void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
 
-  optional<CO_IF_FRM> recv_frame;
+
  
  protected:
   output::FloatOutput *output_;

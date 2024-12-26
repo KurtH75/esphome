@@ -29,9 +29,9 @@ void VscpLightOutput::write_state(light::LightState *state) {
     bool lightstate;
     state->current_values_as_binary(&lightstate);
     if (lightstate) {
-      canbus->send_data(0x001e0500, true, false, [0x00, 0x00, 0xD3]);  //turn subzone 0xD3 on
+      canbus->send_data(0x001e0500, true, false, {0x00, 0x00, 0xD3});  //turn subzone 0xD3 on
     } 
-    else canbus->send_data(0x001e0600, true, false, [0x00, 0x00, 0xD3]);  //turn subzone 0xD3 off
+    else canbus->send_data(0x001e0600, true, false, {0x00, 0x00, 0xD3});  //turn subzone 0xD3 off
 }
 
 void VscpLightOutput::set_subzone(int8_t subzone_) {

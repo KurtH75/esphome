@@ -66,10 +66,12 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
   // CONodeProcess(&node);
   ESP_LOGD("vscp:", "class1.INFORMATION event received");
   if (can_id == 0x00140300) {
-    this-> publish_state(true);
+    ESP_LOGD("vscp:", "turn_on event");
+    // how to publish light-on state to HA without triggering 'write_state'
   }
   if (can_id == 0x140400) {
-
+    ESP_LOGD("vscp:", "turn_off event");
+    // how to publish light-off state to HA without triggering 'write_state'
   }
 }
 

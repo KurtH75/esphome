@@ -64,7 +64,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
   // recv_frame = {{can_id, {}, (uint8_t) data.size()}};
   // memcpy(recv_frame.value().Data, &data[0], data.size());
   // CONodeProcess(&node);
-  ESP_LOGD("vscp:", "turnon received")
+  ESP_LOGD("vscp:", "turnon received");
 }
 
 

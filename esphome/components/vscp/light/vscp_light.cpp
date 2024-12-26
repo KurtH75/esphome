@@ -49,7 +49,7 @@ void VscpLightOutput::set_canbus(canbus::Canbus *canbus) {
 
   this->canbus = canbus;
 
-  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0x00140000, 0x01ff0000, true); // Filter out only 'INFO' events
+  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0x00140000, 0x01fff800, true); // Filter out only 'INFO <7' events
   canbus_canbustrigger->set_component_source("canbus");
   App.register_component(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);

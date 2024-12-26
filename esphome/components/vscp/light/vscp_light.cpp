@@ -49,7 +49,7 @@ void VscpLightOutput::set_canbus(canbus::Canbus *canbus) {
 
   this->canbus = canbus;
 
-  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0, 0, false);
+  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0x00140300, 0x1ffff00, true); // this is a turnon action. Zone/subzone in data
   canbus_canbustrigger->set_component_source("canbus");
   App.register_component(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);
@@ -64,6 +64,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
   // recv_frame = {{can_id, {}, (uint8_t) data.size()}};
   // memcpy(recv_frame.value().Data, &data[0], data.size());
   // CONodeProcess(&node);
+  ESP_LOGD("vscp:", "turnon received")
 }
 
 

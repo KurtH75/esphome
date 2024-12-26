@@ -49,7 +49,7 @@ void VscpLightOutput::set_canbus(canbus::Canbus *canbus) {
 
   this->canbus = canbus;
 
-  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0x00140000, 0x1ff0000, true); // Filter out only 'INFO' events
+  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0x00140000, 0x01ff0000, true); // Filter out only 'INFO' events
   canbus_canbustrigger->set_component_source("canbus");
   App.register_component(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);
@@ -69,7 +69,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
     ESP_LOGD("vscp:", "turn_on event");
     // how to publish light-on state to HA without triggering 'write_state'
   }
-  if (can_id == 0x140400) {
+  if (can_id == 0x00140400) {
     ESP_LOGD("vscp:", "turn_off event");
     // how to publish light-off state to HA without triggering 'write_state'
   }

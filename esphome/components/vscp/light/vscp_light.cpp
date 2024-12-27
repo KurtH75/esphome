@@ -81,7 +81,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
     // how to publish light-on state to HA without triggering 'write_state'
     this->receive_ = true;
 
-		auto call = this->state_->turn_on();
+		//auto call = this->state_->turn_on();
 		//call.set_rgb(red, green, blue);
 		//call.set_brightness(_value);
 		//if(command == Command::ON)
@@ -94,7 +94,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
     ESP_LOGD("vscp:", "turn_off event");
     // how to publish light-off state to HA without triggering 'write_state'
     this->receive_ = true;
-		auto call = this->state_->turn_off();
+		//auto call = this->state_->turn_off();
 
 		//call.perform();
 		return;

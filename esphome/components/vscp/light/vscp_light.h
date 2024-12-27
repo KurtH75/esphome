@@ -30,6 +30,8 @@ class VscpLightOutput : public light::LightOutput, public Component {
  protected:
   output::FloatOutput *output_;
   canbus::Canbus *vscpbus_;
+  light::LightState *state_ { nullptr };
+	bool receive_ = false;
 };
 
 } //namespace vscp

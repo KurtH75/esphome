@@ -10,7 +10,12 @@ namespace vscp {
 static const char *TAG = "vscp_light.light";
 
 void VscpLightOutput::setup() {
+  ESP_LOGCONFIG(TAG, "Setting up VSCP light...");
    
+}
+
+void VscpLightOutput::dump_config(){
+    ESP_LOGCONFIG(TAG, "Empty custom light");
 }
 
 light::LightTraits VscpLightOutput::get_traits() {
@@ -26,8 +31,15 @@ light::LightTraits VscpLightOutput::get_traits() {
 }
 
 void VscpLightOutput::write_state(light::LightState *state) {
+    if (this->receive_ == true) {
+      ESP_LOGV(TAG, "Receive mode, don't write state to light");
+      this->receive_ = false;
+      return;
+    }
+
     bool lightstate;
     state->current_values_as_binary(&lightstate);
+ 
     if (lightstate) {
       canbus->send_data(0x001e0500, true, false, {0x00, 0x00, 0xD3});  //turn subzone 0xD3 on
     } 
@@ -38,9 +50,7 @@ void VscpLightOutput::set_subzone(int8_t subzone_) {
     
 }
 
-void VscpLightOutput::dump_config(){
-    ESP_LOGCONFIG(TAG, "Empty custom light");
-}
+
 
 void VscpLightOutput::set_canbus(canbus::Canbus *canbus) {
   Automation<std::vector<uint8_t>, uint32_t, bool> *automation;
@@ -66,12 +76,28 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
   // CONodeProcess(&node);
   ESP_LOGD("vscp:", "class1.INFORMATION event received");
   if (can_id == 0x00140300) {
+
     ESP_LOGD("vscp:", "turn_on event");
     // how to publish light-on state to HA without triggering 'write_state'
+    this->receive_ = true;
+
+		auto call = this->state_->turn_on();
+		//call.set_rgb(red, green, blue);
+		//call.set_brightness(_value);
+		//if(command == Command::ON)
+		//	call.set_effect("none");
+
+		//call.perform();
+		return;
   }
   if (can_id == 0x00140400) {
     ESP_LOGD("vscp:", "turn_off event");
     // how to publish light-off state to HA without triggering 'write_state'
+    this->receive_ = true;
+		auto call = this->state_->turn_off();
+
+		//call.perform();
+		return;
   }
 }
 

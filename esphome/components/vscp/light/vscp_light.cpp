@@ -74,7 +74,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
   // recv_frame = {{can_id, {}, (uint8_t) data.size()}};
   // memcpy(recv_frame.value().Data, &data[0], data.size());
   // CONodeProcess(&node);
-  ESP_LOGD("vscp:", "class1.INFORMATION event received");
+  ESP_LOGD("vscp:", "class1.INFORMATION event received: %x", can_id);
   if ((can_id && 0x00FFFF00) == 0x00140300) {
 
     ESP_LOGD("vscp:", "turn_on event");

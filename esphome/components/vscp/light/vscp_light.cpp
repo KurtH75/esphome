@@ -87,7 +87,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
 		//if(command == Command::ON)
 		//	call.set_effect("none");
 
-		call.perform();
+		//call.perform();
 		return;
   }
   if ((can_id & 0x00FFFF00) == 0x00140400) {
@@ -96,7 +96,7 @@ void VscpLightOutput::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &
     this->receive_ = true;
 		auto call = this->state_->turn_off();
 
-		call.perform();
+		//call.perform();
 		return;
   }
 }

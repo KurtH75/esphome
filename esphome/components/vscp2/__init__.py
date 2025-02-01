@@ -11,7 +11,7 @@ vscp2_ns = cg.esphome_ns.namespace("vscp2")
 Vscp2Component = vscp2_ns.class_(
     "Vscp2Component", cg.Component  #"Vscp2Component", cc2500.CC2500Device, cg.Component
 )
-)
+
 
 CONF_VSCP2_ID = "vscp2_id"
 CONF_ADDRESS = "address"

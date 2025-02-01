@@ -21,17 +21,17 @@ enum class Command : uint8_t {
 	CYCLE_SYNC = 0x12,
 };
 
-class vscp2ClientComponent;
+class Vscp2ClientComponent;
 
 //class vscp2Component: public Component, public cc2500::CC2500Device<0, 3, 14> {
-class vscp2Component: public Component {
+class Vscp2Component: public Component {
 public:
 	void setup() override;
 
 //	void dump_config() override;
 	bool receive(uint8_t *data, uint8_t length) override;
 
-	void add_device(vscp2ClientComponent *device) { this->devices_.push_back(device); }
+	void add_device(Vscp2ClientComponent *device) { this->devices_.push_back(device); }
 	void send(uint8_t *data, uint8_t length);
 	
 	canbus::Canbus *canbus;
@@ -40,14 +40,14 @@ public:
 
 
 protected:
-	std::vector<vscp2ClientComponent *> devices_;
+	std::vector<Vscp2ClientComponent *> devices_;
 
 	uint8_t serial_number_ = 0;
 };
 
-class vscp2ClientComponent: public Component {
+class Vscp2ClientComponent: public Component {
 public:
-	void set_parent(vscp2Component *parent);
+	void set_parent(Vscp2Component *parent);
 	void set_address(uint64_t address) {
 		this->address_ = address;
 	}
@@ -60,7 +60,7 @@ public:
 	virtual bool receive(uint64_t address, uint8_t *data, uint8_t length);
 
 protected:
-	vscp2Component *parent_ { nullptr };
+	Vscp2Component *parent_ { nullptr };
 	uint64_t address_;
 	uint16_t send_repeats_ = 7;
 

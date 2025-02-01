@@ -2,6 +2,7 @@
 
 #include "esphome/core/log.h"
 #include "esphome/components/canbus/canbus.h"
+#include "esphome.h"
 
 #include <cinttypes>
 
@@ -10,7 +11,7 @@ namespace vscp2 {
 
 static const char *TAG = "vscp2";
 
-void vscp2Component::setup() {
+void Vscp2Component::setup() {
 	ESP_LOGCONFIG(TAG, "Setting up VSCP2 generation component...");
 
 // 	uint8_t data[15];
@@ -21,7 +22,7 @@ void vscp2Component::setup() {
 // 	((CC2500Device*)this)->send(data, 15);
  	}
 
-bool vscp2Component::receive(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
+bool Vscp2Component::receive(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
 	ESP_LOGV(TAG, "class1.INFORMATION event received: %x", can_id);
 	if ((can_id & 0x00FFFF00) == 0x00140300) {
     ESP_LOGV(TAG, "turn_on event");
@@ -46,17 +47,17 @@ bool vscp2Component::receive(uint32_t can_id, bool rtr, std::vector<uint8_t> &da
 	return true;
 }
 
-void vscp2Component::send(uint8_t *data, uint8_t length) {
+void Vscp2Component::send(uint8_t *data, uint8_t length) {
 	data[11] = this->serial_number_++;
 	((CC2500Device*)this)->send(data, length);
 }
 
-void vscp2ClientComponent::set_parent(vscp2Component *parent) {
+void Vscp2ClientComponent::set_parent(vscp2Component *parent) {
 	this->parent_ = parent;
 	this->parent_->add_device(this);
 }
 
-void vscp2ClientComponent::send_(uint64_t address, uint8_t *data, uint8_t length) {
+void Vscp2ClientComponent::send_(uint64_t address, uint8_t *data, uint8_t length) {
 	uint8_t length_ = 10 + length;
 	uint8_t data_[length_];
 
@@ -87,23 +88,37 @@ void vscp2ClientComponent::send_(uint64_t address, uint8_t *data, uint8_t length
 	}
 }
 
-void set_canbus(canbus::Canbus *canbus) {
+void Vscp2Component::set_canbus(canbus::Canbus *canbus) {
   Automation<std::vector<uint8_t>, uint32_t, bool> *automation;
   LambdaAction<std::vector<uint8_t>, uint32_t, bool> *lambdaaction;
   canbus::CanbusTrigger *canbus_canbustrigger;
 
   this->canbus = canbus;
 
-  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0x00140000, 0x01fff800, true); // Filter out only 'INFO <7' events
+  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0, 0, true); //permit all messages
   canbus_canbustrigger->set_component_source("canbus");
   App.register_component(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);
   auto cb = [this](std::vector<uint8_t> x, uint32_t can_id, bool remote_transmission_request) -> void {
-    this->receive(can_id, remote_transmission_request, x);
+    this->void on_frame(can_id, remote_transmission_request, x);
   };
   lambdaaction = new LambdaAction<std::vector<uint8_t>, uint32_t, bool>(cb);
   automation->add_actions({lambdaaction});
 }
+
+void Vscp2Component::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
+  CO_IF_FRM frame = {can_id, {}, (uint8_t) data.size()};
+  memcpy(frame.Data, &data[0], data.size());
+  recv_frames.push_back(frame);
+  // this assumes single-threded ESPHome callbacks
+  current_canopen = this;
+
+  CONodeProcess(node);
+  if (pdo_od_writer_enabled)
+    parse_od_writer_frame(&frame);
+
+  current_canopen = 0;
+})
 
 }
 }

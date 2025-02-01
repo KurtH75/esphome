@@ -6,12 +6,12 @@
 #include "esphome/components/light/light_output.h"
 #include "esphome/components/light/base_light_effects.h"
 #include "esphome/components/light/esp_hsv_color.h"
-#include "esphome/components/livingcolors1/livingcolors1.h"
+#include "esphome/components/vscp2/vscp2.h"
 
 namespace esphome {
-namespace livingcolors1 {
+namespace vscp2 {
 
-class LivingColors1Light: public LivingColors1ClientComponent, public light::LightOutput {
+class Vscp2Light: public Vscp2ClientComponent, public light::LightOutput {
 public:
 	void setup() override;
 
@@ -30,9 +30,9 @@ protected:
 	bool receive_ = false;
 };
 
-class LivingColors1CycleLightEffect : public light::LightEffect {
+class Vscp2CycleLightEffect : public light::LightEffect {
 public:
-	LivingColors1CycleLightEffect()
+	Vscp2CycleLightEffect()
 	: light::LightEffect("Color Cycle") {}
 
 	/// Called when this effect is about to be removed

@@ -4,20 +4,20 @@
 #include <cinttypes>
 
 namespace esphome {
-namespace livingcolors1 {
+namespace vscp2 {
 
-static const char *const TAG = "livingcolors1.button";
+static const char *const TAG = "vscp2.button";
 
-void LivingColors1ButtonComponent::setup() {
+void Vscp2ButtonComponent::setup() {
 	ESP_LOGCONFIG(TAG, "Setting up Living Colors gen 1 button...");
 }
 
-void LivingColors1ButtonComponent::dump_config() {
+void Vscp2ButtonComponent::dump_config() {
 	LOG_BUTTON("", "Living Colors gen 1 button:", this);
 	ESP_LOGCONFIG(TAG, "  Address: 0x%016" PRIX64, this->address_);
 }
 
-void LivingColors1PairButton::press_action() {
+void Vscp2PairButton::press_action() {
 	ESP_LOGV(TAG, "Pair Button press for address 0x%016" PRIX64, this->special_address_());
 
 	uint8_t data[5];
@@ -33,7 +33,7 @@ void LivingColors1PairButton::press_action() {
 	this->send_(this->special_address_(), &data[0], 5);
 }
 
-bool LivingColors1PairButton::receive(uint64_t address, uint8_t *data, uint8_t length) {
+bool Vscp2PairButton::receive(uint64_t address, uint8_t *data, uint8_t length) {
 	// Command
 	Command command = (Command) data[0];
 
@@ -52,7 +52,7 @@ bool LivingColors1PairButton::receive(uint64_t address, uint8_t *data, uint8_t l
 	return false;
 }
 
-void LivingColors1UnpairButton::press_action() {
+void Vscp2UnpairButton::press_action() {
 	ESP_LOGV(TAG, "Pair Button press for address 0x%016" PRIX64, this->special_address_());
 
 	uint8_t data[5];
@@ -68,7 +68,7 @@ void LivingColors1UnpairButton::press_action() {
 	this->send(data, 5);
 }
 
-void LivingColors1TestButton::press_action() {
+void Vscp2TestButton::press_action() {
 	ESP_LOGV(TAG, "Test Button press for address 0x%016" PRIX64, this->address_);
 
 	uint8_t data[5];
@@ -90,5 +90,5 @@ void LivingColors1TestButton::press_action() {
 	this->command++;
 }
 
-}  // namespace livingcolors1
+}  // namespace vscp2
 }  // namespace esphome

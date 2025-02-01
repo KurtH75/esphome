@@ -4,25 +4,25 @@ from esphome.components import light
 from esphome.const import CONF_LIGHT_ID
 
 from .. import (
-    LIVINGCOLORS1_DEVICE_SCHEMA,
-    livingcolors1_ns,
-    register_livingcolors1_device,
+    VSCP2_DEVICE_SCHEMA,
+    vscp2_ns,
+    register_vscp2_device,
 )
 
-DEPENDENCIES = ["livingcolors1"]
+DEPENDENCIES = ["vscp2"]
 CODEOWNERS = ["@rrooggiieerr"]
 
-LivingColors1Light = livingcolors1_ns.class_(
-    "LivingColors1Light", cg.Component, light.LightOutput
+Vscp2Light = vscp2_ns.class_(
+    "Vscp2Light", cg.Component, light.LightOutput
 )
 
 CONFIG_SCHEMA = cv.All(
     light.LIGHT_SCHEMA.extend(
         {
-            cv.GenerateID(CONF_LIGHT_ID): cv.declare_id(LivingColors1Light),
+            cv.GenerateID(CONF_LIGHT_ID): cv.declare_id(Vscp2Light),
         }
     )
-    .extend(LIVINGCOLORS1_DEVICE_SCHEMA)
+    .extend(VSCP2_DEVICE_SCHEMA)
     .extend(cv.COMPONENT_SCHEMA)
 )
 
@@ -30,5 +30,5 @@ CONFIG_SCHEMA = cv.All(
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_LIGHT_ID])
     await cg.register_component(var, config)
-    await register_livingcolors1_device(var, config)
+    await register_vscp2_device(var, config)
     await light.register_light(var, config)

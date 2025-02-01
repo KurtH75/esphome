@@ -4,30 +4,30 @@
 #include <cinttypes>
 
 namespace esphome {
-namespace livingcolors1 {
+namespace vscp2 {
 
-static const char *TAG = "livingcolors1.light";
+static const char *TAG = "vscp2.light";
 
-void LivingColors1Light::setup() {
+void Vscp2Light::setup() {
 	ESP_LOGCONFIG(TAG, "Setting up Living Colors gen 1 light...");
 }
 
-void LivingColors1Light::dump_config() {
+void Vscp2Light::dump_config() {
 	ESP_LOGCONFIG(TAG, "Living Colors gen 1 light:");
 	ESP_LOGCONFIG(TAG, "  Address: 0x%016" PRIX64, this->address_);
 	ESP_LOGCONFIG(TAG, "  Send repeats: %d", this->send_repeats_);
 }
 
-void LivingColors1Light::setup_state(light::LightState *state) {
+void Vscp2Light::setup_state(light::LightState *state) {
 	state_ = state;
 	state_->set_gamma_correct(0);
 	state_->set_default_transition_length(0);
 	std::vector<light::LightEffect *> effects;
-	effects.push_back(new LivingColors1CycleLightEffect());
+	effects.push_back(new Vscp2CycleLightEffect());
 	state_->add_effects(effects);
 }
 
-void LivingColors1Light::write_state(light::LightState *state) {
+void Vscp2Light::write_state(light::LightState *state) {
 	if (this->receive_ == true) {
 		ESP_LOGV(TAG, "Receive mode, don't write state to light");
 		this->receive_ = false;
@@ -73,7 +73,7 @@ void LivingColors1Light::write_state(light::LightState *state) {
 	this->send(data, 5);
 }
 
-bool LivingColors1Light::receive(uint64_t address, uint8_t *data, uint8_t length) {
+bool Vscp2Light::receive(uint64_t address, uint8_t *data, uint8_t length) {
 	if (length != 5)
 		return false;
 
@@ -174,11 +174,11 @@ bool LivingColors1Light::receive(uint64_t address, uint8_t *data, uint8_t length
 	return false;
 }
 
-void LivingColors1CycleLightEffect::apply() {
+void Vscp2CycleLightEffect::apply() {
 	if(!this->applied_) {
-		ESP_LOGV(TAG, "LivingColors1CycleLightEffect::apply");
+		ESP_LOGV(TAG, "Vscp2CycleLightEffect::apply");
 
-		LivingColors1Light *output = (LivingColors1Light*) this->state_->get_output();
+		Vscp2Light *output = (Vscp2Light*) this->state_->get_output();
 		Command command;
 		uint8_t hue, saturation, value;
 		float red, green, blue;
@@ -211,9 +211,9 @@ void LivingColors1CycleLightEffect::apply() {
 	}
 }
 
-void LivingColors1CycleLightEffect::stop() {
-	ESP_LOGV(TAG, "LivingColors1CycleLightEffect::stop");
-	LivingColors1Light *output = (LivingColors1Light*) this->state_->get_output();
+void Vscp2CycleLightEffect::stop() {
+	ESP_LOGV(TAG, "Vscp2CycleLightEffect::stop");
+	Vscp2Light *output = (Vscp2Light*) this->state_->get_output();
 	uint8_t data[5];
 
 	// Command

@@ -68,7 +68,7 @@ void Vscp2Light::write_state(light::LightState *state) {
 	this->send((uint32_t) vcommand, data);
 }
 
-bool Vscp2Light::receive(uint32_t vcommand, uint8_t *data) {
+bool Vscp2Light::receive(uint32_t vcommand, std::vector<uint8_t> *data) {
 	// Command
 	vcommand = vcommand & 0xFFFF00;
 	

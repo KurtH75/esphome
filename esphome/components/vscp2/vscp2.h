@@ -53,16 +53,16 @@ public:
 	void set_subzone(uint8_t subzone) {
 		this->subzone_ = subzone;
 	}
-	void send(uint32_t vcommand, uint8_t *data);
+	void send(uint32_t vcommand, std::vector<uint8_t> *data);
 
-	virtual bool receive(uint32_t vcommand, uint8_t *data);
+	virtual bool receive(uint32_t vcommand, std::vector<uint8_t> *data);
 
 protected:
 	Vscp2Component *parent_ { nullptr };
 	uint8_t zone_;
 	uint8_t subzone_;
 	
-	void send_(uint32_t vcommand, uint8_t *data);
+	void send_(uint32_t vcommand, std::vector<uint8_t> *data);
 	
 };
 

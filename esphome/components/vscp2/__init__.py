@@ -23,6 +23,7 @@ CONFIG_SCHEMA = (
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(Vscp2Component),
+            cv.Optional("canbus_id", default="vscpbus"): cv.use_id(CanbusComponent),
         }
     )
     # .extend(cc2500.CC2500_DEVICE_SCHEMA)

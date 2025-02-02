@@ -6,19 +6,17 @@
 namespace esphome {
 namespace vscp2 {
 
-enum class Command : uint8_t {
-	PAIRING_REQUEST = 0x01,
-	PAIRING_RESPONSE = 0x02,
-	HSV = 0x03,
-	ACK_HSV = 0x04,
-	ON = 0x05,
-	ACK_ON = 0x06,
-	OFF = 0x07,
-	ACK_OFF = 0x08,
-	UNPAIRING_REQUEST = 0x0A,
-	CYCLE = 0x0C,
-	ACK_CYCLE = 0x0D,
-	CYCLE_SYNC = 0x12,
+//VSCP Can bus message classes and types mapped on the can extended id.
+enum class VSCPcommand : uint32_t {
+	
+	EVENT_INFORMATION_ON = 0x140300,
+	EVENT_INFORMATION_OFF = 0x140400,
+	EVENT_INFORMATION_HEARTBEAT = 0x140900,
+	EVENT_INFORMATION_LEVEL = 0x142800,
+
+	EVENT_CONTROL_TURN_ON = 0x1e0500,
+	EVENT_CONTROL_TURN_OFF = 0x1e0600,
+	EVENT_CHANGE_LEVEL = 0x1e1600,
 };
 
 class Vscp2ClientComponent;
@@ -29,10 +27,12 @@ public:
 	void setup() override;
 
 //	void dump_config() override;
-	bool receive(uint8_t *data, uint8_t length) override;
+	//bool receive(uint8_t *data, uint8_t length) override;
+	bool receive(uint32_t  vcommand, std::vector<uint8_t> &data);
 
 	void add_device(Vscp2ClientComponent *device) { this->devices_.push_back(device); }
-	void send(uint8_t *data, uint8_t length);
+//	void send(uint8_t *data, uint8_t length);
+	void send(uint32_t vcommand, std::vector<uint8_t> &data);
 	
 	canbus::Canbus *canbus;
   	void set_canbus(canbus::Canbus *canbus);
@@ -41,38 +41,30 @@ public:
 
 protected:
 	std::vector<Vscp2ClientComponent *> devices_;
-
-	uint8_t serial_number_ = 0;
+	uint8_t vnode_id_bridge_ = 0;
 };
 
 class Vscp2ClientComponent: public Component {
 public:
 	void set_parent(Vscp2Component *parent);
-	void set_address(uint64_t address) {
-		this->address_ = address;
+	void set_zone(uint8_t zone) {
+		this->zone_ = zone;
 	}
-	void set_send_repeats(uint16_t n_times) {
-		this->send_repeats_ = n_times;
+	void set_subzone(uint8_t subzone) {
+		this->subzone_ = subzone;
 	}
-	void send(uint8_t *data, uint8_t length) {
-		this->send_(this->address_, &data[0], length);
+	void send(uint32_t vcommand, uint8_t *data) {
+		this->send_(vcommand, &data);
 	}
 	virtual bool receive(uint64_t address, uint8_t *data, uint8_t length);
 
 protected:
 	Vscp2Component *parent_ { nullptr };
-	uint64_t address_;
-	uint16_t send_repeats_ = 7;
-
-	void send_(uint64_t address, uint8_t *data, uint8_t length);
-	uint64_t swapped_address_() { return ((0x00000000FFFFFFFF & this->address_)<< 32) | ((0xFFFFFFFF00000000 & this->address_) >> 32); }
-	uint64_t special_address_() { return 0xFFFFFFFF00000000 | (0x00000000FFFFFFFF & this->address_); }
-	bool is_address_(uint64_t address) { return address == this->address_; }
-	// A response has the light address and remote address swapped.
-	bool is_response_(uint64_t address) { return address == this->swapped_address_(); }
-	// If the first 4 bytes of the address are all 0xFF it seems to be a special address for
-	// pairing and color cycling (and more?).
-	bool is_special_(uint64_t address) { return address == this->special_address_(); }
+	uint8_t zone_;
+	uint8_t subzone_;
+	
+	void send_(uint32_t vcommand, uint8_t *data);
+	
 };
 
 }

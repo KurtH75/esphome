@@ -20,32 +20,16 @@ public:
 	void write_state(light::LightState *state) override;
 	light::LightTraits get_traits() override {
 		auto traits = light::LightTraits();
-		traits.set_supported_color_modes( { light::ColorMode::RGB });
+		traits.set_supported_color_modes( { light::ColorMode::ON_OFF });
 		return traits;
 	}
-	bool receive(uint64_t address, uint8_t *data, uint8_t length) override;
+	bool receive(uint32_t vcommand, uint8_t *data) override;
 
 protected:
 	light::LightState *state_ { nullptr };
 	bool receive_ = false;
 };
 
-class Vscp2CycleLightEffect : public light::LightEffect {
-public:
-	Vscp2CycleLightEffect()
-	: light::LightEffect("Color Cycle") {}
-
-	/// Called when this effect is about to be removed
-	void stop() override;
-
-	/// Apply this effect. Use the provided state for starting transitions, ...
-	void apply() override;
-
-	/// Internal method called by the LightState when this light effect is registered in it.
-	void init() {}
-protected:
-	bool applied_ = false;
-};
 
 }
 }

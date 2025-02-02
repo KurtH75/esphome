@@ -22,8 +22,8 @@ void Vscp2Component::setup() {
 // 	((CC2500Device*)this)->send(data, 15);
  	}
 
-bool Vscp2Component::receive(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
-	ESP_LOGV(TAG, "class1.INFORMATION event received: %x", can_id);
+bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
+	ESP_LOGV(TAG, "VSCP event received: %x with data ", can_id);
 	if ((can_id & 0x00FFFF00) == 0x00140300) {
     ESP_LOGV(TAG, "turn_on event");
   	}
@@ -34,22 +34,24 @@ bool Vscp2Component::receive(uint32_t can_id, bool rtr, std::vector<uint8_t> &da
 	// Check if the address is handled by a device
 	bool success = false;
 	for (auto device : this->devices_) {
-		if(device->receive(can_id, rts, data)
+		if(device->receive(can_id, data)
 			success = true;
 	}
 
 	if(!success) {
 		// If the address is not yet handled, log the address as detected
-		ESP_LOGI(TAG, "Address detected: 0x%016" PRIX64, address);
-		ESP_LOGI(TAG, "  payload: 0x%06" PRIX64, payload);
+		ESP_LOGI(TAG, "VSCP message was not processed");
+		//ESP_LOGI(TAG, "  payload: 0x%06" PRIX64, payload);
 	}
 
 	return true;
 }
 
-void Vscp2Component::send(uint8_t *data, uint8_t length) {
-	data[11] = this->serial_number_++;
-	((CC2500Device*)this)->send(data, length);
+void Vscp2Component::send(uint32_t vcommand, uint8_t *data) {
+	
+	
+	canbus->send_data(vcommand, true, data);  //sufficient?
+	
 }
 
 void Vscp2ClientComponent::set_parent(vscp2Component *parent) {
@@ -57,34 +59,9 @@ void Vscp2ClientComponent::set_parent(vscp2Component *parent) {
 	this->parent_->add_device(this);
 }
 
-void Vscp2ClientComponent::send_(uint64_t address, uint8_t *data, uint8_t length) {
-	uint8_t length_ = 10 + length;
-	uint8_t data_[length_];
-
-	// Packet length
-	data_[0] = 10 + length - 1;
-
-	// Addresses
-	data_[1] = uint8_t(address >> 8 * 7);
-	data_[2] = uint8_t(address >> 8 * 6);
-	data_[3] = uint8_t(address >> 8 * 5);
-	data_[4] = uint8_t(address >> 8 * 4);
-	data_[5] = uint8_t(address >> 8 * 3);
-	data_[6] = uint8_t(address >> 8 * 2);
-	data_[7] = uint8_t(address >> 8 * 1);
-	data_[8] = uint8_t(address >> 8 * 0);
-
-	// Fixed
-	data_[9] = 0x11;
-
-	// Command
-	for(int j = 0; j < length; j++)
-		data_[10+j] = data[j];
-
-	for (int i = 0; i < this->send_repeats_; i++) {
-		if(i > 0)
-			esphome::delay(14);
-		this->parent_->send(&data_[0], length_);
+void Vscp2ClientComponent::send_(uint32_t vcommand, uint8_t *data) {
+	
+	this->parent_->send(vcommand, data);
 	}
 }
 
@@ -107,17 +84,8 @@ void Vscp2Component::set_canbus(canbus::Canbus *canbus) {
 }
 
 void Vscp2Component::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
-  CO_IF_FRM frame = {can_id, {}, (uint8_t) data.size()};
-  memcpy(frame.Data, &data[0], data.size());
-  recv_frames.push_back(frame);
-  // this assumes single-threded ESPHome callbacks
-  current_canopen = this;
+  receive(can_id, &data);
 
-  CONodeProcess(node);
-  if (pdo_od_writer_enabled)
-    parse_od_writer_frame(&frame);
-
-  current_canopen = 0;
 })
 
 }

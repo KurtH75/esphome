@@ -13,9 +13,11 @@ Vscp2Component = vscp2_ns.class_(
 )
 
 
-CONF_VSCP2_ID = "vscp2_id"
-CONF_ADDRESS = "address"
-CONF_SEND_REPEATS = "send_repeats"
+VSCPBRIDGE_ID = "bridge_node_id"
+VSCP_ZONE = 'zone'
+VSCP_SUBZONE = 'subzone'
+VSCP_CANBUS = 'canbus_id'
+
 
 CONFIG_SCHEMA = (
     cv.Schema(
@@ -33,14 +35,18 @@ async def to_code(config):
 
     await cg.register_component(var, config)
     #await cc2500.register_cc2500_device(var, config)
+    canbus = yield cg.get_variable(config["canbus_id"])
+    cg.add(var.set_canbus(canbus))
+
 
 
 # A schema to use for all CC2500 devices, all CC2500 integrations must extend this!
 VSCP2_DEVICE_SCHEMA = cv.Schema(
     {
-        cv.GenerateID(CONF_VSCP2_ID): cv.use_id(Vscp2Component),
-        cv.Required(CONF_ADDRESS): cv.hex_uint64_t,
-        cv.Optional(CONF_SEND_REPEATS): cv.positive_int,
+        cv.GenerateID(VSCPBRIDGE_ID): cv.use_id(Vscp2Component),
+        cv.Optional("canbus_id", default="vscpbus"): cv.use_id(CanbusComponent),
+        cv.Required(VSCP_SUBZONE): cv.int_,
+        cv.Optional(VSCP_ZONE, default=0x00): cv.int_,
     }
 )
 
@@ -51,3 +57,4 @@ async def register_vscp2_device(var, config):
     cg.add(var.set_address(config[CONF_ADDRESS]))
     if CONF_SEND_REPEATS in config:
         cg.add(var.set_send_repeats(config[CONF_SEND_REPEATS]))
+

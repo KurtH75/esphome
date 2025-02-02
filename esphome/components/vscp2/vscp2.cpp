@@ -64,7 +64,7 @@ void Vscp2ClientComponent::send_(uint32_t vcommand, uint8_t *data) {
 	
 	this->parent_->send(vcommand, data);
 	}
-}
+
 
 void Vscp2Component::set_canbus(canbus::Canbus *canbus) {
   Automation<std::vector<uint8_t>, uint32_t, bool> *automation;

@@ -85,13 +85,13 @@ bool Vscp2Light::receive(uint32_t vcommand, uint8_t *data) {
 	// float red, green, blue;
 	// hsv_to_rgb(_hue, _saturation, _value, red, green, blue);
 
-	if((vcommand == Command::EVENT_INFORMATION_OFF) && (vzone_ == data[1]) && (vsubzone_ == data[2])) {
+	if((vcommand == VSCPcommand::EVENT_INFORMATION_OFF) && (zone_ == data[1]) && (subzone_ == data[2])) {
 		this->receive_ = true;
 		auto call = this->state_->turn_off();
 
 		call.perform();
 		return true;
-	} else if((vcommand == Command::EVENT_INFORMATION_ON) && (vzone_ == data[1]) && (vsubzone_ == data[2])) {
+	} else if((vcommand == VSCPcommand::EVENT_INFORMATION_ON) && (zone_ == data[1]) && (subzone_ == data[2])) {
 		this->receive_ = true;
 
 		auto call = this->state_->turn_on();

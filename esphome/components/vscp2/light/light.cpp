@@ -65,7 +65,7 @@ void Vscp2Light::write_state(light::LightState *state) {
 	data[1] = this->zone_;
 	data[2] = this->subzone_;
 	
-	this->send(vcommand, data);
+	this->send((uint32_t) vcommand, data);
 }
 
 bool Vscp2Light::receive(uint32_t vcommand, uint8_t *data) {

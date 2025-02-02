@@ -14,8 +14,8 @@ void Vscp2Light::setup() {
 
 void Vscp2Light::dump_config() {
 	ESP_LOGCONFIG(TAG, "VSCP light:");
-	ESP_LOGCONFIG(TAG, "  Zone: %x", this->vzone_);
-	ESP_LOGCONFIG(TAG, "  Subzone: %d", this->vsubzone_);
+	ESP_LOGCONFIG(TAG, "  Zone: %x", this->zone_);
+	ESP_LOGCONFIG(TAG, "  Subzone: %d", this->subzone_);
 }
 
 void Vscp2Light::setup_state(light::LightState *state) {
@@ -56,14 +56,14 @@ void Vscp2Light::write_state(light::LightState *state) {
 		value = 0;
 	}
 
-	ESP_LOGV(TAG, "Setting light on zone 0x%02X - subzone 0x%02X to 0x%02X 0x%02X 0x%02X 0x%02X", this->vzone_, this->vsubzone_,  (uint8_t) vcommand, hue, value);
+	ESP_LOGV(TAG, "Setting light on zone 0x%02X - subzone 0x%02X to 0x%02X 0x%02X 0x%02X 0x%02X", this->zone_, this->subzone_,  (uint8_t) vcommand, hue, value);
 
 	uint8_t data[3];
 
 	// VSCP can packet format
 	data[0] = 0;
-	data[1] = this->vzone_;
-	data[2] = this->vsubzone_;
+	data[1] = this->zone_;
+	data[2] = this->subzone_;
 	
 	this->send(vcommand, data);
 }

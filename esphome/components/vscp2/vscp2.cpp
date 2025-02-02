@@ -23,7 +23,7 @@ void Vscp2Component::setup() {
  	}
 
 bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
-	ESP_LOGV(TAG, "VSCP event received: %x with data ", can_id);
+	ESP_LOGV(TAG, "VSCP event received: %x with data ", vcommand);
 	if ((can_id & 0x00FFFF00) == 0x00140300) {
     ESP_LOGV(TAG, "turn_on event");
   	}
@@ -35,7 +35,7 @@ bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
 	// Check if the address is handled by a device
 	bool success = false;
 	for (auto device : this->devices_) {
-		if(device->receive(can_id, data)
+		if(device->receive(can_id, data))
 			success = true;
 	}
 
@@ -60,7 +60,7 @@ void Vscp2ClientComponent::set_parent(vscp2Component *parent) {
 	this->parent_->add_device(this);
 }
 
-void Vscp2ClientComponent::send_(uint32_t vcommand, uint8_t *data) {
+void Vscp2ClientComponent::send_(uint32_t vcommand, uint8_t data) {
 	
 	this->parent_->send(vcommand, data);
 	}

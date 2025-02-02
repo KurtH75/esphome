@@ -24,18 +24,18 @@ void Vscp2Component::setup() {
 
 bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
 	ESP_LOGV(TAG, "VSCP event received: %x with data ", vcommand);
-	if ((can_id & 0x00FFFF00) == 0x00140300) {
+	if ((vcommand & 0x00FFFF00) == 0x00140300) {
     ESP_LOGV(TAG, "turn_on event");
   	}
 
-  	if ((can_id & 0x00FFFF00) == 0x00140400) {
+  	if ((vcommand & 0x00FFFF00) == 0x00140400) {
     ESP_LOGV(TAG, "turn_off event");
 	}
     
 	// Check if the address is handled by a device
 	bool success = false;
 	for (auto device : this->devices_) {
-		if(device->receive(can_id, data))
+		if(device->receive(vcommand, data))
 			success = true;
 	}
 
@@ -60,7 +60,7 @@ void Vscp2ClientComponent::set_parent(vscp2Component *parent) {
 	this->parent_->add_device(this);
 }
 
-void Vscp2ClientComponent::send_(uint32_t vcommand, uint8_t data) {
+void Vscp2ClientComponent::send_(uint32_t vcommand, uint8_t *data) {
 	
 	this->parent_->send(vcommand, data);
 	}
@@ -78,16 +78,17 @@ void Vscp2Component::set_canbus(canbus::Canbus *canbus) {
   App.register_component(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);
   auto cb = [this](std::vector<uint8_t> x, uint32_t can_id, bool remote_transmission_request) -> void {
-    this->void on_frame(can_id, remote_transmission_request, x);
+//    this->void on_frame(can_id, remote_transmission_request, x);
+     this->void receive(can_id, x);
   };
   lambdaaction = new LambdaAction<std::vector<uint8_t>, uint32_t, bool>(cb);
   automation->add_actions({lambdaaction});
 }
 
-void Vscp2Component::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
-  receive(can_id, &data);
+// void Vscp2Component::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
+//   receive(can_id, data);
 
-})
+// })
 
 }
 }

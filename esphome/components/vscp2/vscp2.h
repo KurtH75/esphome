@@ -28,15 +28,15 @@ public:
 
 //	void dump_config() override;
 	//bool receive(uint8_t *data, uint8_t length) override;
-	bool receive(uint32_t  vcommand, std::vector<uint8_t> &data);
+	bool receive(uint32_t  vcommand, std::vector<uint8_t> *data);
 
 	void add_device(Vscp2ClientComponent *device) { this->devices_.push_back(device); }
 //	void send(uint8_t *data, uint8_t length);
-	void send(uint32_t vcommand, std::vector<uint8_t> &data);
+	void send(uint32_t vcommand, std::vector<uint8_t> *data);
 	
 	canbus::Canbus *canbus;
   	void set_canbus(canbus::Canbus *canbus);
-  	void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
+  //	void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
 
 
 protected:

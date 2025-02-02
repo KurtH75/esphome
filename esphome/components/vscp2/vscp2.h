@@ -53,10 +53,9 @@ public:
 	void set_subzone(uint8_t subzone) {
 		this->subzone_ = subzone;
 	}
-	void send(uint32_t vcommand, uint8_t *data) {
-		this->send_(vcommand, &data);
-	}
-	virtual bool receive(uint64_t address, uint8_t *data, uint8_t length);
+	void send(uint32_t vcommand, uint8_t *data);
+
+	virtual bool receive(uint32_t vcommand, uint8_t *data);
 
 protected:
 	Vscp2Component *parent_ { nullptr };

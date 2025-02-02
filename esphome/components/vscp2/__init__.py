@@ -35,12 +35,9 @@ async def to_code(config):
 
     await cg.register_component(var, config)
     #await cc2500.register_cc2500_device(var, config)
-    canbus = yield cg.get_variable(config["canbus_id"])
+    canbus = await cg.get_variable(config["canbus_id"])
     cg.add(var.set_canbus(canbus))
 
-
-
-# A schema to use for all CC2500 devices, all CC2500 integrations must extend this!
 VSCP2_DEVICE_SCHEMA = cv.Schema(
     {
         cv.GenerateID(VSCPBRIDGE_ID): cv.use_id(Vscp2Component),
@@ -54,7 +51,6 @@ VSCP2_DEVICE_SCHEMA = cv.Schema(
 async def register_vscp2_device(var, config):
     parent = await cg.get_variable(config[CONF_VSCP2_ID])
     cg.add(var.set_parent(parent))
-    cg.add(var.set_address(config[CONF_ADDRESS]))
-    if CONF_SEND_REPEATS in config:
-        cg.add(var.set_send_repeats(config[CONF_SEND_REPEATS]))
+    cg.add(var.set_zone(config[VSCP_ZONE]))
+    cg.add(var.set_subzone(config[VSCP_SUBZONE]))
 

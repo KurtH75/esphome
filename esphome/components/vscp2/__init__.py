@@ -42,7 +42,7 @@ async def to_code(config):
 VSCP2_DEVICE_SCHEMA = cv.Schema(
     {
         cv.GenerateID(VSCPBRIDGE_ID): cv.use_id(Vscp2Component),
-        cv.Optional("canbus_id", default="vscpbus"): cv.use_id(CanbusComponent),
+       # cv.Optional("canbus_id", default="vscpbus"): cv.use_id(CanbusComponent),
         cv.Required(VSCP_SUBZONE): cv.int_,
         cv.Optional(VSCP_ZONE, default=0x00): cv.int_,
     }
@@ -50,7 +50,7 @@ VSCP2_DEVICE_SCHEMA = cv.Schema(
 
 
 async def register_vscp2_device(var, config):
-    parent = await cg.get_variable(config[CONF_VSCP2_ID])
+    parent = await cg.get_variable(config[VSCPBRIDGE_ID])
     cg.add(var.set_parent(parent))
     cg.add(var.set_zone(config[VSCP_ZONE]))
     cg.add(var.set_subzone(config[VSCP_SUBZONE]))

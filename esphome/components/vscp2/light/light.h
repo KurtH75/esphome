@@ -23,7 +23,7 @@ public:
 		traits.set_supported_color_modes( { light::ColorMode::ON_OFF });
 		return traits;
 	}
-	bool receive(uint32_t vcommand, std::vector<uint8_t> *data) override;
+	bool receive(uint32_t vcommand, std::vector<uint8_t> &data) override;
 
 protected:
 	light::LightState *state_ { nullptr };

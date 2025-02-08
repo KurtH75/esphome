@@ -48,7 +48,7 @@ bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
 	return true;
 }
 
-void Vscp2Component::send(uint32_t vcommand, std::vector<uint8_t> *data) {
+void Vscp2Component::send(uint32_t vcommand, std::vector<uint8_t> &data) {
 	
 	
 	canbus->send_data(vcommand, true, data);  //sufficient?
@@ -60,7 +60,7 @@ void Vscp2ClientComponent::set_parent(vscp2Component *parent) {
 	this->parent_->add_device(this);
 }
 
-void Vscp2ClientComponent::send_(uint32_t vcommand, std::vector<uint8_t> *data) {
+void Vscp2ClientComponent::send(uint32_t vcommand, std::vector<uint8_t> &data) {
 	
 	this->parent_->send(vcommand, data);
 	}

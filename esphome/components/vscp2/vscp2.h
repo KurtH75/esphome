@@ -28,16 +28,17 @@ public:
 
 //	void dump_config() override;
 	//bool receive(uint8_t *data, uint8_t length) override;
-	bool receive(uint32_t  vcommand, std::vector<uint8_t> *data);
+	bool receive(uint32_t  vcommand, std::vector<uint8_t> &data);
 
 	void add_device(Vscp2ClientComponent *device) { this->devices_.push_back(device); }
 //	void send(uint8_t *data, uint8_t length);
-	void send(uint32_t vcommand, std::vector<uint8_t> *data);
+	void send(uint32_t vcommand, std::vector<uint8_t> &data);
 	
 	canbus::Canbus *canbus;
   	void set_canbus(canbus::Canbus *canbus);
   //	void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
-
+	std::vector<uint8_t> VSCP_RX_DATA[8];
+	std::vector<uint8_t> VSCP_TX_DATA[8];
 
 protected:
 	std::vector<Vscp2ClientComponent *> devices_;
@@ -53,16 +54,16 @@ public:
 	void set_subzone(uint8_t subzone) {
 		this->subzone_ = subzone;
 	}
-	void send(uint32_t vcommand, std::vector<uint8_t> *data);
+	void send(uint32_t vcommand, std::vector<uint8_t> &data);
 
-	virtual bool receive(uint32_t vcommand, std::vector<uint8_t> *data);
+	virtual bool receive(uint32_t vcommand, std::vector<uint8_t>  &data);
 
 protected:
 	Vscp2Component *parent_ { nullptr };
 	uint8_t zone_;
 	uint8_t subzone_;
 	
-	void send_(uint32_t vcommand, std::vector<uint8_t> *data);
+	//void send_(uint32_t vcommand, std::vector<uint8_t> &data);
 	
 };
 

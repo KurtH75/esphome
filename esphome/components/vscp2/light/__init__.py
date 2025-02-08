@@ -38,6 +38,8 @@ LIGHT_SCHEMA = (
                 RESTORE_MODES, upper=True, space="_"
             ),
         }
+    )
+)
 
 
 Vscp2Light = vscp2_ns.class_(

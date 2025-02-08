@@ -11,6 +11,17 @@
 namespace esphome {
 namespace vscp2 {
 
+enum LightRestoreMode {
+  LIGHT_RESTORE_DEFAULT_OFF,
+  LIGHT_RESTORE_DEFAULT_ON,
+  LIGHT_ALWAYS_OFF,
+  LIGHT_ALWAYS_ON,
+  LIGHT_RESTORE_INVERTED_DEFAULT_OFF,
+  LIGHT_RESTORE_INVERTED_DEFAULT_ON,
+  LIGHT_RESTORE_AND_OFF,
+  LIGHT_RESTORE_AND_ON,
+};
+
 class Vscp2Light: public Vscp2ClientComponent, public light::LightOutput {
 public:
 	void setup() override;

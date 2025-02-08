@@ -29,6 +29,8 @@ CONFIG_SCHEMA = cv.All(
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_LIGHT_ID])
+    
     await cg.register_component(var, config)
     await register_vscp2_device(var, config)
     await light.register_light(var, config)
+    cg.add(var.set_restore_mode(LIGHT_RESTORE_DEFAULT_ON ))

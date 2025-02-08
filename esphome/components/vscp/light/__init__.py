@@ -26,7 +26,7 @@ def to_code(config):
     var = cg.new_Pvariable(config[CONF_OUTPUT_ID])
     yield light.register_light(var, config)
     
-    cg.add(var.set_restore_mode(LIGHT_RESTORE_DEFAULT_ON ))
+
 
     canbus = yield cg.get_variable(config["canbus_id"])
     cg.add(var.set_canbus(canbus))

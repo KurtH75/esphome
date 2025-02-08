@@ -1,5 +1,6 @@
 #include "esphome/core/log.h"
 #include "light.h"
+#include "light_state.h"
 
 #include <cinttypes>
 
@@ -22,7 +23,7 @@ void Vscp2Light::setup_state(light::LightState *state) {
 	state_ = state;
 	state_->set_gamma_correct(0);
 	state_->set_default_transition_length(0);
-	state_->set_restore_mode(LightRestoreMode 0); //LIGHT_RESTORE_DEFAULT_OFF
+	state_->set_restore_mode(LIGHT_RESTORE_DEFAULT_OFF); //LIGHT_RESTORE_DEFAULT_OFF
 } 
 
 void Vscp2Light::write_state(light::LightState *state) {

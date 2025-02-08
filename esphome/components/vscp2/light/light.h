@@ -21,6 +21,7 @@ public:
 	light::LightTraits get_traits() override {
 		auto traits = light::LightTraits();
 		traits.set_supported_color_modes( { light::ColorMode::ON_OFF });
+		traits.
 		return traits;
 	}
 	bool receive(uint32_t vcommand, std::vector<uint8_t> &data) override;

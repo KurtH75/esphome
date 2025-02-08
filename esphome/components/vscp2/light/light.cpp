@@ -1,6 +1,6 @@
 #include "esphome/core/log.h"
 #include "light.h"
-#include "light_state.h"
+#include "../../light/light_state.h"
 
 #include <cinttypes>
 

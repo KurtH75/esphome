@@ -33,4 +33,3 @@ async def to_code(config):
     await cg.register_component(var, config)
     await register_vscp2_device(var, config)
     await light.register_light(var, config)
-    cg.add(var.set_restore_mode(LIGHT_RESTORE_DEFAULT_ON ))

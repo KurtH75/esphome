@@ -23,7 +23,7 @@ void Vscp2Component::setup() {
  	}
 
 bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
-	ESP_LOGV(TAG, "VSCP event received from node: %x", (vcommand & 0xFF);
+	ESP_LOGV(TAG, "VSCP event received from node: %x", (vcommand & 0xFF));
 	if ((vcommand & 0x00FFFF00) == 0x00140900) {
     ESP_LOGV(TAG, "Node heartbeat");
   	}

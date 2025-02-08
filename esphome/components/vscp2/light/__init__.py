@@ -37,7 +37,7 @@ LIGHT_SCHEMA = (
             cv.Optional(CONF_RESTORE_MODE, default="ALWAYS_OFF"): cv.enum(
                 RESTORE_MODES, upper=True, space="_"
             ),
-
+        }
 
 
 Vscp2Light = vscp2_ns.class_(

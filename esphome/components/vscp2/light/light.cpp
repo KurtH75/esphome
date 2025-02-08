@@ -86,14 +86,14 @@ bool Vscp2Light::receive(uint32_t vcommand, std::vector<uint8_t> &data) {
 	// hsv_to_rgb(_hue, _saturation, _value, red, green, blue);
 
 	if((vcommand == (uint32_t) VSCPcommand::EVENT_INFORMATION_OFF) && (zone_ == data[1]) && (subzone_ == data[2])) {
-		ESP_LOGV(TAG, "Matched Event_Off with entity on zone %x and subzone %x", zone_, subzone_;
+		ESP_LOGV(TAG, "Matched Event_Off with entity on zone %x and subzone %x", zone_, subzone_);
 		this->receive_ = true;
 		auto call = this->state_->turn_off();
 
 		call.perform();
 		return true;
 	} else if((vcommand == (uint32_t) VSCPcommand::EVENT_INFORMATION_ON) && (zone_ == data[1]) && (subzone_ == data[2])) {
-		ESP_LOGV(TAG, "Matched Event_On with entity on zone %x and subzone %x", zone_, subzone_;
+		ESP_LOGV(TAG, "Matched Event_On with entity on zone %x and subzone %x", zone_, subzone_);
 		this->receive_ = true;
 
 		auto call = this->state_->turn_on();

@@ -55,7 +55,7 @@ void Vscp2Component::send(uint32_t vcommand, std::vector<uint8_t> &data) {
 	
 }
 
-void Vscp2ClientComponent::set_parent(vscp2Component *parent) {
+void Vscp2ClientComponent::set_parent(Vscp2Component *parent) {
 	this->parent_ = parent;
 	this->parent_->add_device(this);
 }

@@ -36,7 +36,7 @@ public:
 	
 	canbus::Canbus *canbus;
   	void set_canbus(canbus::Canbus *canbus);
-  //	void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
+  	void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
 	std::vector<uint8_t> VSCP_RX_DATA[8];
 	std::vector<uint8_t> VSCP_TX_DATA[8];
 

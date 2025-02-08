@@ -78,17 +78,17 @@ void Vscp2Component::set_canbus(canbus::Canbus *canbus) {
   App.register_component(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);
   auto cb = [this](std::vector<uint8_t> x, uint32_t can_id, bool remote_transmission_request) -> void {
-//    this->void on_frame(can_id, remote_transmission_request, x);
-     this->void receive(can_id, x);
+    this->void on_frame(can_id, remote_transmission_request, x);
+    
   };
   lambdaaction = new LambdaAction<std::vector<uint8_t>, uint32_t, bool>(cb);
   automation->add_actions({lambdaaction});
 }
 
-// void Vscp2Component::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
-//   receive(can_id, data);
+ void Vscp2Component::on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data) {
+   receive(can_id, data);
 
-// })
+ }
 
 }
 }

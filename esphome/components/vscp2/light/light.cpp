@@ -58,7 +58,7 @@ void Vscp2Light::write_state(light::LightState *state) {
 
 	ESP_LOGV(TAG, "Setting light on zone 0x%02X - subzone 0x%02X to 0x%02X 0x%02X 0x%02X 0x%02X", this->zone_, this->subzone_,  (uint8_t) vcommand, hue, value);
 
-	std::vector<uint8_t> data[3];
+	std::vector<uint8_t> data(3);
 
 	// VSCP can packet format
 	data[0] = 0;

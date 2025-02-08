@@ -24,7 +24,8 @@ void Vscp2Light::setup_state(light::LightState *state) {
 	state_ = state;
 	state_->set_gamma_correct(0);
 	state_->set_default_transition_length(0);
-	state_->set_restore_mode(LightRestoreMode.LIGHT_RESTORE_AND_OFF); //I can't get this to work.
+	//state_->set_restore_mode(LightRestoreMode.LIGHT_RESTORE_AND_OFF); //I can't get this to work.
+}
 
 void Vscp2Light::write_state(light::LightState *state) {
 	if (this->receive_ == true) {

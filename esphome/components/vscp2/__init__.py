@@ -17,6 +17,7 @@ VSCPBRIDGE_ID = "bridge_node_id"
 VSCP_ZONE = 'zone'
 VSCP_SUBZONE = 'subzone'
 VSCP_CANBUS = 'canbus_id'
+DIMMABLE = 'brightness'
 
 
 CONFIG_SCHEMA = (
@@ -45,6 +46,7 @@ VSCP2_DEVICE_SCHEMA = cv.Schema(
        # cv.Optional("canbus_id", default="vscpbus"): cv.use_id(CanbusComponent),
         cv.Required(VSCP_SUBZONE): cv.int_,
         cv.Optional(VSCP_ZONE, default=0x00): cv.int_,
+        cv.Optional(DIMMABLE, default=False): cv.boolean,
     }
 )
 
@@ -54,4 +56,5 @@ async def register_vscp2_device(var, config):
     cg.add(var.set_parent(parent))
     cg.add(var.set_zone(config[VSCP_ZONE]))
     cg.add(var.set_subzone(config[VSCP_SUBZONE]))
+    cg.add(var.set_dimmable(config[DIMMABLE]))
 

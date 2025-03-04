@@ -57,11 +57,15 @@ public:
 	void send(uint32_t vcommand, std::vector<uint8_t> &data);
 
 	virtual bool receive(uint32_t vcommand, std::vector<uint8_t>  &data);
+	void set_dimmable(bool dimmable) {
+		this->dimmable_ = dimmable;
+	}
 
 protected:
 	Vscp2Component *parent_ { nullptr };
 	uint8_t zone_;
 	uint8_t subzone_;
+	bool dimmable_;
 	
 	//void send_(uint32_t vcommand, std::vector<uint8_t> &data);
 	

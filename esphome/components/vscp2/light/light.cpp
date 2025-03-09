@@ -45,7 +45,7 @@ void Vscp2Light::write_state(light::LightState *state) {
 		if (this->dimmable_) {
 			vcommand = VSCPcommand::EVENT_CHANGE_LEVEL;
 			pwm_value = (uint8_t) lroundf(brightness * 255.0);
-			ESP_LOGI(TAG, "Setting light on zone/subzone 0x%02X / 0x%02X to PWM value 0x%02X", this->zone_, this->subzone_, pwm_value);
+			ESP_LOGI(TAG, "Setting light on zone/subzone 0x%02X / 0x%02X to brightness %.4f -> PWM value 0x%02X", this->zone_, this->subzone_, brightness, pwm_value);
 
 
 		}
@@ -110,7 +110,7 @@ bool Vscp2Light::receive(uint32_t vcommand, std::vector<uint8_t> &data) {
 	} else if((vcommand == (uint32_t) VSCPcommand::EVENT_INFORMATION_LEVEL) && (zone_ == data[1]) && (subzone_ == data[2])) {
 		ESP_LOGV(TAG, "Matched Event_Level with entity on zone %x and subzone %x", zone_, subzone_);
 		this->receive_ = true;
-		_value = (float) data[0]/255;
+		_value = (float) (data[0]/255.0);
 
 		auto call = this->state_->make_call();
 		call.set_brightness(_value);

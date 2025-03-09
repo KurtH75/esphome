@@ -44,7 +44,7 @@ void Vscp2Light::write_state(light::LightState *state) {
 		vcommand = VSCPcommand::EVENT_CONTROL_TURN_ON;
 		if (this->dimmable_) {
 			vcommand = VSCPcommand::EVENT_CHANGE_LEVEL;
-			pwm_value = (uint8_t) brightness * 255;
+			pwm_value = (uint8_t) lroundf(brightness * 255.0);
 			ESP_LOGI(TAG, "Setting light on zone/subzone 0x%02X / 0x%02X to brightness %.4f -> PWM value 0x%02X", this->zone_, this->subzone_, brightness, pwm_value);
 
 

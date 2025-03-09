@@ -34,11 +34,11 @@ void Vscp2Light::write_state(light::LightState *state) {
 		return;
 	}
 
-	float brightness, pwm_value;
+	float brightness
 	state->current_values_as_brightness(&brightness);
 
 	VSCPcommand vcommand;
-	uint8_t hue, saturation, value;
+	uint8_t pwm_value;
 	if (brightness > 0.0) {
 
 		vcommand = VSCPcommand::EVENT_CONTROL_TURN_ON;

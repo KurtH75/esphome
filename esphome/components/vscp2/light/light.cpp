@@ -34,7 +34,7 @@ void Vscp2Light::write_state(light::LightState *state) {
 		return;
 	}
 
-	float brightness
+	float brightness;
 	state->current_values_as_brightness(&brightness);
 
 	VSCPcommand vcommand;

@@ -117,6 +117,7 @@ bool Vscp2Light::receive(uint32_t vcommand, std::vector<uint8_t> &data) {
 
 		call.perform();
 		return true;
+	}
 
 	//ESP_LOGE(TAG, "Received unknown command 0x%02X", vcommand);
 	return false;

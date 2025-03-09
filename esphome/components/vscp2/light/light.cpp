@@ -34,29 +34,25 @@ void Vscp2Light::write_state(light::LightState *state) {
 		return;
 	}
 
-	float brightness;
+	float brightness, pwm_value;
 	state->current_values_as_brightness(&brightness);
 
 	VSCPcommand vcommand;
 	uint8_t hue, saturation, value;
 	if (brightness > 0.0) {
-		float red, green, blue;
-		state->current_values_as_rgb(&red, &green, &blue, false);
-
-		int _hue;
-		float _saturation, _value;
-		rgb_to_hsv(red, green, blue, _hue, _saturation, _value);
 
 		vcommand = VSCPcommand::EVENT_CONTROL_TURN_ON;
+		if (this->dimmable_) {
+			vcommand = VSCPcommand::EVENT_CHANGE_LEVEL;
+			pwm_value = (uint8_t) lroundf(brightness * 255.0);
 
-		hue = (uint8_t) lroundf(_hue * (255.0 / 360.0));
-		saturation = (uint8_t) lroundf(_saturation * 255.0);
-		value = (uint8_t) lroundf(_value * 255.0);
+		}
+		else vcommand = VSCPcommand::EVENT_CONTROL_TURN_ON;
+
+		
 	} else {
 		vcommand = VSCPcommand::EVENT_CONTROL_TURN_OFF;
-		hue = 0;
-		saturation = 0;
-		value = 0;
+
 	}
 
 	ESP_LOGV(TAG, "Setting light on zone 0x%02X - subzone 0x%02X to 0x%02X 0x%02X 0x%02X 0x%02X", this->zone_, this->subzone_,  (uint8_t) vcommand, hue, value);
@@ -64,7 +60,7 @@ void Vscp2Light::write_state(light::LightState *state) {
 	std::vector<uint8_t> data(3);
 
 	// VSCP can packet format
-	data[0] = 0;
+	data[0] = pwm_value;
 	data[1] = this->zone_;
 	data[2] = this->subzone_;
 	
@@ -84,7 +80,7 @@ bool Vscp2Light::receive(uint32_t vcommand, std::vector<uint8_t> &data) {
 
 	// int _hue = int(round(float(hue) / (255.0 / 360.0)));
 	// float _saturation = float(saturation) / 255;
-	// float _value = float(value) / 255;
+	float _value;
 	// float red, green, blue;
 	// hsv_to_rgb(_hue, _saturation, _value, red, green, blue);
 
@@ -107,7 +103,19 @@ bool Vscp2Light::receive(uint32_t vcommand, std::vector<uint8_t> &data) {
 
 		call.perform();
 		return true;
-	} 
+	} else if((vcommand == (uint32_t) VSCPcommand::EVENT_INFORMATION_LEVEL) && (zone_ == data[1]) && (subzone_ == data[2])) {
+		ESP_LOGV(TAG, "Matched Event_Level with entity on zone %x and subzone %x", zone_, subzone_);
+		this->receive_ = true;
+		_value = (float) data[0]/255;
+		//auto call = this->state_->turn_on();
+		// call.set_rgb(red, green, blue);
+		auto call.set_brightness(_value);
+	
+		// if(command == Command::ON)
+		// 	call.set_effect("none");
+
+		call.perform();
+		return true;
 
 	//ESP_LOGE(TAG, "Received unknown command 0x%02X", vcommand);
 	return false;

@@ -24,8 +24,10 @@ void Vscp2Component::setup() {
 
 bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
 	ESP_LOGV(TAG, "VSCP event received from node: %x", (vcommand & 0xFF));
+	bool success = false;
 	if ((vcommand & 0x00FFFF00) == 0x00140900) {
-    ESP_LOGV(TAG, "Node heartbeat");
+    ESP_LOGI(TAG, "Node heartbeat");
+	success = true;
   	}
 	if ((vcommand & 0x00FFFF00) == 0x00140300) {
     ESP_LOGV(TAG, "Info_on event");
@@ -36,7 +38,7 @@ bool Vscp2Component::receive(uint32_t  vcommand, std::vector<uint8_t> &data) {
 	}
     
 	// Check if the address is handled by a device
-	bool success = false;
+	
 	for (auto device : this->devices_) {
 		if(device->receive(vcommand, data))
 			success = true;

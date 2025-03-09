@@ -45,18 +45,22 @@ void Vscp2Light::write_state(light::LightState *state) {
 		if (this->dimmable_) {
 			vcommand = VSCPcommand::EVENT_CHANGE_LEVEL;
 			pwm_value = (uint8_t) lroundf(brightness * 255.0);
+			ESP_LOGI(TAG, "Setting light on zone/subzone 0x%02X / 0x%02X to PWM value 0x%02X", this->zone_, this->subzone_, pwm_value);
+
 
 		}
-		else vcommand = VSCPcommand::EVENT_CONTROL_TURN_ON;
-
+		else {
+			vcommand = VSCPcommand::EVENT_CONTROL_TURN_ON;
+			ESP_LOGI(TAG, "Setting light on zone/subzone 0x%02X / 0x%02X to ON", this->zone_, this->subzone_);
+		}
 		
 	} else {
 		vcommand = VSCPcommand::EVENT_CONTROL_TURN_OFF;
+		ESP_LOGI(TAG, "Setting light on zone/subzone 0x%02X / 0x%02X to OFF", this->zone_, this->subzone_);
 
 	}
 
-	ESP_LOGV(TAG, "Setting light on zone 0x%02X - subzone 0x%02X to 0x%02X 0x%02X 0x%02X 0x%02X", this->zone_, this->subzone_,  (uint8_t) vcommand, hue, value);
-
+	
 	std::vector<uint8_t> data(3);
 
 	// VSCP can packet format

@@ -107,7 +107,8 @@ bool Vscp2Light::receive(uint32_t vcommand, std::vector<uint8_t> &data) {
 		ESP_LOGV(TAG, "Matched Event_Level with entity on zone %x and subzone %x", zone_, subzone_);
 		this->receive_ = true;
 		_value = (float) data[0]/255;
-		auto call = this->state_->current_values;
+		if (_value > 0.0) auto call = this->state_->turn_on;
+			else auto call = this->state_->turn_off;
 		// call.set_rgb(red, green, blue);
 		call.set_brightness(_value);
 	

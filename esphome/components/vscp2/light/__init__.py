@@ -18,6 +18,8 @@ Vscp2Light = vscp2_ns.class_(
     "Vscp2Light", cg.Component, light.LightOutput
 )
 
+CONF_BRIGHTNESSMAP = "brightnessmap"
+
 CONFIG_SCHEMA = cv.All(
     light.LIGHT_SCHEMA.extend(
         {
@@ -25,6 +27,11 @@ CONFIG_SCHEMA = cv.All(
         }
     )
     .extend(VSCP2_DEVICE_SCHEMA)
+    .extend(
+        {
+            cv.Optional(CONF_BRIGHTNESSMAP): cv.ensure_list(cv.int_range(min=0, max=100)),
+        }
+    )
     .extend(cv.COMPONENT_SCHEMA)
 )
 
@@ -35,3 +42,8 @@ async def to_code(config):
     await cg.register_component(var, config)
     await register_vscp2_device(var, config)
     await light.register_light(var, config)
+
+    # brightness map (optional): list of integers 0..100
+    if CONF_BRIGHTNESSMAP in config:
+        for v in config[CONF_BRIGHTNESSMAP]:
+            cg.add(var.add_brightness_map_value(v))

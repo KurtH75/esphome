@@ -7,6 +7,7 @@
 #include "esphome/components/light/base_light_effects.h"
 #include "esphome/components/light/esp_hsv_color.h"
 #include "esphome/components/vscp2/vscp2.h"
+#include <vector>
 
 namespace esphome {
 namespace vscp2 {
@@ -29,9 +30,14 @@ public:
 	}
 	bool receive(uint32_t vcommand, std::vector<uint8_t> &data) override;
 
+	// brightness map: list of values 0..100 representing the output percentage
+	void add_brightness_map_value(uint8_t val) { this->brightness_map_.push_back(val); }
+
 protected:
 	light::LightState *state_ { nullptr };
 	bool receive_ = false;
+
+	std::vector<uint8_t> brightness_map_;
 };
 
 

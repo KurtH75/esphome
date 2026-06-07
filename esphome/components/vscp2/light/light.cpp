@@ -44,7 +44,26 @@ void Vscp2Light::write_state(light::LightState *state) {
 		vcommand = VSCPcommand::EVENT_CONTROL_TURN_ON;
 		if (this->dimmable_) {
 			vcommand = VSCPcommand::EVENT_CHANGE_LEVEL;
-			pwm_value = (uint8_t) lroundf(brightness * 255.0);
+			// map brightness (0..1) to pwm using optional brightness_map_
+			if (!this->brightness_map_.empty()) {
+				// interpolate across brightness_map_ entries (values are percentages 0..100)
+				size_t n = this->brightness_map_.size();
+				float pos = brightness * float(n - 1);
+				size_t idx = (size_t) floorf(pos);
+				if (idx >= n - 1) {
+					// last element
+					uint8_t pct = this->brightness_map_[n - 1];
+					pwm_value = (uint8_t) lroundf((pct / 100.0f) * 255.0f);
+				} else {
+					float frac = pos - float(idx);
+					float a = float(this->brightness_map_[idx]);
+					float b = float(this->brightness_map_[idx + 1]);
+					float mapped_pct = a + frac * (b - a);
+					pwm_value = (uint8_t) lroundf((mapped_pct / 100.0f) * 255.0f);
+				}
+			} else {
+				pwm_value = (uint8_t) lroundf(brightness * 255.0);
+			}
 			ESP_LOGI(TAG, "Setting light on zone/subzone 0x%02X / 0x%02X to brightness %.4f -> PWM value 0x%02X", this->zone_, this->subzone_, brightness, pwm_value);
 
 

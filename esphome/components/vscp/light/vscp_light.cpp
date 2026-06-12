@@ -61,7 +61,7 @@ void VscpLightOutput::set_canbus(canbus::Canbus *canbus) {
 
   canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0x00140000, 0x01fff800, true); // Filter out only 'INFO <7' events
   canbus_canbustrigger->set_component_source(LOG_STR("canbus"));
-  App.register_component(canbus_canbustrigger);
+  App.register_component_(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);
   auto cb = [this](std::vector<uint8_t> x, uint32_t can_id, bool remote_transmission_request) -> void {
     this->on_frame(can_id, remote_transmission_request, x);

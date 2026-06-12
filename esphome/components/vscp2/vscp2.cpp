@@ -78,8 +78,8 @@ void Vscp2Component::set_canbus(canbus::Canbus *canbus) {
 
   this->canbus = canbus;
 
-  canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0, 0, true); //permit all messages
-  canbus_canbustrigger->set_component_source("canbus");
+	canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0, 0, true); //permit all messages
+	canbus_canbustrigger->set_component_source(LOG_STR("canbus"));
   App.register_component(canbus_canbustrigger);
   automation = new Automation<std::vector<uint8_t>, uint32_t, bool>(canbus_canbustrigger);
   auto cb = [this](std::vector<uint8_t> x, uint32_t can_id, bool remote_transmission_request) -> void {

@@ -5,7 +5,10 @@
 #include "esphome/components/light/light_output.h"
 #include "esphome/components/canbus/canbus.h"
 
-#include "esphome.h"
+//#include "esphome.h"
+#include "esphome/core/application.h"   // for App
+#include "esphome/core/automation.h"    // for Automation<>
+#include "esphome/core/base_automation.h" // for LambdaAction<>
 #include "esphome/core/component.h"
 #include "esphome/core/defines.h"
 

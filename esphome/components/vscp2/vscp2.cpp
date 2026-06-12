@@ -76,7 +76,7 @@ void Vscp2Component::set_canbus(canbus::Canbus *canbus) {
   LambdaAction<std::vector<uint8_t>, uint32_t, bool> *lambdaaction;
   canbus::CanbusTrigger *canbus_canbustrigger;
 
-  this->canbus = canbus;
+  this->canbus_ = canbus;
 
 	canbus_canbustrigger = new canbus::CanbusTrigger(canbus, 0, 0, true); //permit all messages
 	canbus_canbustrigger->set_component_source(LOG_STR("canbus"));

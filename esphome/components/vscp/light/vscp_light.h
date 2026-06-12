@@ -5,10 +5,7 @@
 #include "esphome/components/light/light_output.h"
 #include "esphome/components/canbus/canbus.h"
 
-//#include "esphome.h"
-#include "esphome/core/application.h"   // for App
-#include "esphome/core/automation.h"    // for Automation<>
-#include "esphome/core/base_automation.h" // for LambdaAction<>
+#include "esphome.h"
 #include "esphome/core/component.h"
 #include "esphome/core/defines.h"
 
@@ -25,7 +22,9 @@ class VscpLightOutput : public light::LightOutput, public Component {
   void set_subzone(int8_t subzone_);
   
   canbus::Canbus *canbus;
-  void set_canbus(canbus::Canbus *canbus);
+  void set_canbus(canbus::Canbus *canbus) {
+    this->canbus_ = canbus;
+  }
   void on_frame(uint32_t can_id, bool rtr, std::vector<uint8_t> &data);
 
 
